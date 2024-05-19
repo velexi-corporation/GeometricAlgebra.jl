@@ -29,7 +29,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         arch: [x64, x86]
-        version: ['1.6', '1.7', '1.8', '1.9']
+        version: ['1.6', '1.7', '1.8', '1.10']
 
         exclude:
           - os: macos-latest
@@ -40,7 +40,7 @@ jobs:
     env:
         codecov-os: 'Linux'
         codecov-arch: x64
-        codecov-version: '1.9'
+        codecov-version: '1.10'
 
     steps:
       - name: Check out code
@@ -83,9 +83,9 @@ jobs:
             matrix.arch == env.codecov-arch &&
             matrix.version == env.codecov-version
 
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
-          token: 9d54a766-eb01-4827-825a-b5886b607bf2
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: lcov.info
           fail_ci_if_error: true
           verbose: true
@@ -102,7 +102,7 @@ jobs:
       - name: Set up Julia environment
         uses: julia-actions/setup-julia@latest
         with:
-          version: '1.9'
+          version: '1.10'
 
       - name: Install dependencies
         run: julia --project=docs --color=yes -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
